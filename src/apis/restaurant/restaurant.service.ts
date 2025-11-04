@@ -13,7 +13,11 @@ export class RestaurantService {
   async findOneById({
     id,
   }: IRestaurantServiceFindOneById): Promise<Restaurant> {
-    return this.restaurantRepository.findOneById({ id });
+    const result = await this.restaurantRepository.findOneById({ id });
+    if (!result) {
+      throw new Error(`id: ${id} 매장이 없습니다.`);
+    }
+    return result;
   }
 
   async find(): Promise<Restaurant[]> {

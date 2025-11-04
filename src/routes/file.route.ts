@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import upload from '../apis/files/files.service';
+import upload from '../apis/file/file.service';
 
 const fileRouter = Router();
 

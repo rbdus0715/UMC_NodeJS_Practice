@@ -1,15 +1,17 @@
 import { Pool } from 'mysql2/promise';
 import { Review } from './entities/review.entity';
 import { RowDataPacket } from 'mysql2';
-import { CreateReviewInput } from './dto/review.dto';
+import { CreateReviewDto } from './dto/review.dto';
 import { ulid } from 'ulid';
 
 export class ReviewRepository {
   constructor(private readonly pool: Pool) {}
 
-  async create(data: CreateReviewInput): Promise<Review> {
+  async create(data: CreateReviewDto): Promise<Review> {
     const id = ulid();
-    
+    // chapter5 수행하기 위한 코드
+    // data.user_id = 01K924XQ0703MBTFQT2VR209CZ;
+    // data.restaurant_id = 01K90WTE6MGHK2PJBM5RKHT29Y;
     const query_string =
       'INSERT INTO review (id, user_id, restaurant_id, score, content, img_url) VALUES (?, ?, ?, ?, ?, ?)';
     await this.pool.query(query_string, [

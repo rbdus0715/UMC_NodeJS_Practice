@@ -15,6 +15,6 @@ const restaurantService = new RestaurantService(restaurantRepository);
 const reviewService = new ReviewService(reviewRepository, restaurantService);
 const reiviewController = new ReviewController(reviewService);
 
-reviewRouter.post('/', asyncHandler(reiviewController.createReview));
-reviewRouter.get('/', asyncHandler(reiviewController.fetchReviews));
+reviewRouter.post('/', reiviewController.createReview);
+reviewRouter.get('/', reiviewController.fetchReviews);
 export default reviewRouter;

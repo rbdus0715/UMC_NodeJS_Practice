@@ -8,7 +8,8 @@ export class RestaurantRepository {
 
   async create(data: CreateRestaurantInput): Promise<Restaurant> {
     const id = ulid();
-    data.area_id = '01HZXYZ123ABCDEF4567890123';
+    // chapter5 mission에서 정상적으로 작동하기 위해 area_id 필요
+    // data.area_id = '01HZXYZ123ABCDEF4567890123';
     const query_string =
       'INSERT INTO restaurant (id, area_id, name, phone_number, location, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?)';
     const [rows] = await this.pool.query<RowDataPacket[]>(query_string, [
