@@ -5,3 +5,4 @@ dist
 # dotenv environment variable files
 .env
 .env.*
+/src/generated/prisma

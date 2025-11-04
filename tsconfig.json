@@ -11,5 +11,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "sourceMap": true
-  }
+  },
+  "exclude": ["prisma.config.ts"]
 }
