@@ -1,18 +1,18 @@
+import { restaurant } from '@prisma/client';
 import { CreateRestaurantInput } from './dto/restaurant.dto';
-import { Restaurant } from './entities/restaurant.entity';
 import { IRestaurantServiceFindOneById } from './interfaces/restaurant.interface';
 import { RestaurantRepository } from './restaurant.repository';
 
 export class RestaurantService {
   constructor(private readonly restaurantRepository: RestaurantRepository) {}
 
-  async create(data: CreateRestaurantInput): Promise<Restaurant> {
+  async create(data: CreateRestaurantInput): Promise<restaurant> {
     return this.restaurantRepository.create(data);
   }
 
   async findOneById({
     id,
-  }: IRestaurantServiceFindOneById): Promise<Restaurant> {
+  }: IRestaurantServiceFindOneById): Promise<restaurant> {
     const result = await this.restaurantRepository.findOneById({ id });
     if (!result) {
       throw new Error(`id: ${id} 매장이 없습니다.`);
@@ -20,7 +20,7 @@ export class RestaurantService {
     return result;
   }
 
-  async find(): Promise<Restaurant[]> {
+  async find(): Promise<restaurant[]> {
     return this.restaurantRepository.find();
   }
 }

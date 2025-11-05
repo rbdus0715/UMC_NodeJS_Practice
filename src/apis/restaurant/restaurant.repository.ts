@@ -1,38 +1,27 @@
-import { Pool, RowDataPacket } from 'mysql2/promise';
 import { ulid } from 'ulid';
 import { CreateRestaurantInput } from './dto/restaurant.dto';
-import { Restaurant } from './entities/restaurant.entity';
+import { PrismaClient, restaurant } from '@prisma/client';
 
 export class RestaurantRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
-  async create(data: CreateRestaurantInput): Promise<Restaurant> {
-    const id = ulid();
-    // chapter5 mission에서 정상적으로 작동하기 위해 area_id 필요
+  async create(data: CreateRestaurantInput): Promise<restaurant> {
     // data.area_id = '01HZXYZ123ABCDEF4567890123';
-    const query_string =
-      'INSERT INTO restaurant (id, area_id, name, phone_number, location, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    const [rows] = await this.pool.query<RowDataPacket[]>(query_string, [
-      id,
-      data.area_id,
-      data.name,
-      data.phone_number,
-      data.location,
-      data.lat,
-      data.lng,
-    ]);
-    return rows[0] as Restaurant;
+    try {
+      data.id = ulid();
+      return await this.prisma.restaurant.create({ data });
+    } catch (error) {
+      throw new Error('매장 생성 실패');
+    }
   }
 
-  async find(): Promise<Restaurant[]> {
-    const query_string = 'SELECT * FROM restaurant';
-    const [rows] = await this.pool.query<RowDataPacket[]>(query_string);
-    return rows as Restaurant[];
+  async find(): Promise<restaurant[]> {
+    return await this.prisma.restaurant.findMany();
   }
 
-  async findOneById({ id }: { id: string }): Promise<Restaurant> {
-    const query_string = 'SELECT * FROM restaurant WHERE id = ?';
-    const [rows] = await this.pool.query<RowDataPacket[]>(query_string, [id]);
-    return rows[0] as Restaurant;
+  async findOneById({ id }: { id: string }): Promise<restaurant> {
+    const result = await this.prisma.restaurant.findFirst({ where: { id } });
+    if (!result) throw new Error(`id: ${id}인 매장이 존재하지 않습니다.`);
+    return result;
   }
 }

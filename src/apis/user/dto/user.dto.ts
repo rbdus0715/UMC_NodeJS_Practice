@@ -1,6 +1,11 @@
-import { GENDER } from '../entities/user.entity';
+export enum GENDER {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  NONE = 'NONE',
+}
 
 export class CreateUserDto {
+  id!: string;
   name!: string;
   gender!: GENDER;
   birth!: Date;
@@ -10,8 +15,8 @@ export class CreateUserDto {
   profile_url!: string;
   location!: string;
   point!: number;
-  verified!: boolean;
-  notice_status!: boolean;
+  verified!: number;
+  notice_status!: number;
   // created_at: 생성 시각을 default로 세팅함
   deleted_at!: Date | null;
   constructor(body: any) {

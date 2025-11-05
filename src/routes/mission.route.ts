@@ -3,11 +3,11 @@ import asyncHandler from '../commons/asyncHandler';
 import MissionRepository from '../apis/mission/mission.repository';
 import MissionService from '../apis/mission/mission.service';
 import MissionController from '../apis/mission/mission.controller';
-import pool from '../config/db.config';
+import { prisma } from '../config/db.config';
 
 const missionRouter = Router();
 
-const missionRepository = new MissionRepository(pool);
+const missionRepository = new MissionRepository(prisma);
 const missionService = new MissionService(missionRepository);
 const missionController = new MissionController(missionService);
 
