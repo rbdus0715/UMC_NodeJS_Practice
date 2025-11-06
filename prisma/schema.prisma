@@ -147,7 +147,7 @@ model review {
   restaurant_id String       @db.Char(26)
   score         Int?
   content       String?      @db.VarChar(255)
-  img_url       String?      @db.VarChar(255)
+  // img_url       String?      @db.VarChar(255)
   created_at    DateTime?    @db.DateTime(6)
   updated_at    DateTime?    @db.DateTime(0)
   deleted_at    DateTime?    @db.DateTime(0)

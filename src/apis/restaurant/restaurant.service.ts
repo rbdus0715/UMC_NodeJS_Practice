@@ -10,10 +10,8 @@ export class RestaurantService {
     return this.restaurantRepository.create(data);
   }
 
-  async findOneById({
-    id,
-  }: IRestaurantServiceFindOneById): Promise<restaurant> {
-    const result = await this.restaurantRepository.findOneById({ id });
+  async findOneById(id: string): Promise<restaurant> {
+    const result = await this.restaurantRepository.findOneById(id);
     if (!result) {
       throw new Error(`id: ${id} 매장이 없습니다.`);
     }
