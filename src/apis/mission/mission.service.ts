@@ -23,4 +23,8 @@ export default class MissionService {
     const result = await this.missionRepository.findByRestaurantId(restaurant_id, cursor);
     return result;
   }
+
+  async findByUserId(user_id: string, cursor: string) {
+    const result = await this.missionRepository.findByUserId(user_id, cursor);
+  }
 }

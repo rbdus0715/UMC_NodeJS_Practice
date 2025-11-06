@@ -42,4 +42,12 @@ export default class MissionRepository {
     });
     return missions;
   }
+
+  async findByUserId(user_id: string, cursor: string) {
+    const missions = await this.prisma.user_mission.findMany({
+      where: { user_id },
+      include: { mission: true },
+    });
+    return missions;
+  }
 }
