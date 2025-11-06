@@ -3,7 +3,7 @@ import asyncHandler from '../commons/asyncHandler';
 import MissionRepository from '../apis/mission/mission.repository';
 import MissionService from '../apis/mission/mission.service';
 import MissionController from '../apis/mission/mission.controller';
-import { prisma } from '../config/db.config';
+import prisma from '../config/db.config';
 
 const missionRouter = Router();
 

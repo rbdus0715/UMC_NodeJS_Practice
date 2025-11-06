@@ -2,7 +2,7 @@ import { UserController } from '../apis/user/user.controller';
 import UserRepository from '../apis/user/user.repository';
 import UserService from '../apis/user/user.service';
 import express from 'express';
-import { prisma } from '../config/db.config';
+import prisma from '../config/db.config';
 import ReviewService from '../apis/review/review.service';
 import { ReviewRepository } from '../apis/review/review.repository';
 import { RestaurantService } from '../apis/restaurant/restaurant.service';

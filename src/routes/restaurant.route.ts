@@ -2,7 +2,7 @@ import Router from 'express';
 import { RestaurantRepository } from '../apis/restaurant/restaurant.repository';
 import { RestaurantService } from '../apis/restaurant/restaurant.service';
 import { RestaurantController } from '../apis/restaurant/restaurant.controller';
-import { prisma } from '../config/db.config';
+import prisma from '../config/db.config';
 import { ReviewRepository } from '../apis/review/review.repository';
 import ReviewService from '../apis/review/review.service';
 import UserRepository from '../apis/user/user.repository';

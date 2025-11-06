@@ -4,7 +4,7 @@ import ReviewService from '../apis/review/review.service';
 import ReviewController from '../apis/review/review.controller';
 import { RestaurantService } from '../apis/restaurant/restaurant.service';
 import { RestaurantRepository } from '../apis/restaurant/restaurant.repository';
-import { prisma } from '../config/db.config';
+import prisma from '../config/db.config';
 import UserRepository from '../apis/user/user.repository';
 import UserService from '../apis/user/user.service';
 
