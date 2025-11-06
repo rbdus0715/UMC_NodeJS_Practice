@@ -18,4 +18,9 @@ export default class MissionService {
     if (!result) throw new Error(`id: ${id}인 미션이 존재하지 않습니다.`);
     return result;
   }
+
+  async findByRestaurantId(restaurant_id: string, cursor: string) {
+    const result = await this.missionRepository.findByRestaurantId(restaurant_id, cursor);
+    return result;
+  }
 }

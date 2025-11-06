@@ -26,4 +26,20 @@ export default class MissionRepository {
     const result = await this.prisma.mission.findMany();
     return result;
   }
+
+  async findByRestaurantId(restaurant_id: string, cursor: string) {
+    const missions = await this.prisma.mission.findMany({
+      select: {
+        user_mission: {
+          select: {
+            mission: true,
+          },
+        },
+      },
+      where: { restaurant_id, id: { gt: cursor } },
+      orderBy: { created_at: 'desc' },
+      take: 5,
+    });
+    return missions;
+  }
 }
