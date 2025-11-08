@@ -16,4 +16,18 @@ export default class UserMissionRepository {
   async find(): Promise<user_mission[]> {
     return await this.prisma.user_mission.findMany();
   }
+
+  async update(user_id: string, mission_id: string, status: number): Promise<user_mission> {
+    return await this.prisma.user_mission.update({
+      where: {
+        user_id_mission_id: {
+          user_id: user_id,
+          mission_id: mission_id,
+        },
+      },
+      data: {
+        status,
+      },
+    });
+  }
 }

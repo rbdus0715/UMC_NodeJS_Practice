@@ -12,4 +12,8 @@ export default class UserMissionService {
   async find(): Promise<user_mission[]> {
     return await this.userMissionRepository.find();
   }
+
+  async update(user_id: string, mission_id: string, status: number): Promise<user_mission> {
+    return await this.userMissionRepository.update(user_id, mission_id, status);
+  }
 }

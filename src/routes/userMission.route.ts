@@ -11,5 +11,6 @@ const userMissionController = new UserMissionController(userMissionService);
 
 userMissionRouter.get('/', userMissionController.fetchUserMissions);
 userMissionRouter.post('/', userMissionController.createUserMission);
+userMissionRouter.patch('/:user_id/:mission_id', userMissionController.completeUserMission);
 
 export default userMissionRouter;
