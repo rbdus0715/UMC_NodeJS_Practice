@@ -1,6 +1,7 @@
 import { PrismaClient, review } from '@prisma/client';
 import { CreateReviewDto } from './dto/review.dto';
 import { ulid } from 'ulid';
+import { ReviewForRestaurantList, ReviewForUserList } from './review.type';
 
 export class ReviewRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -23,7 +24,7 @@ export class ReviewRepository {
     return result;
   }
 
-  async findByRestaurantId(restaurant_id: string, cursor: string) {
+  async findByRestaurantId(restaurant_id: string, cursor: string): Promise<ReviewForRestaurantList[]> {
     const reviews = await this.prisma.review.findMany({
       select: {
         id: true,
@@ -40,7 +41,7 @@ export class ReviewRepository {
     return reviews;
   }
 
-  async findByUserId(user_id: string, cursor: string) {
+  async findByUserId(user_id: string, cursor: string): Promise<ReviewForUserList[]> {
     const reviews = await this.prisma.review.findMany({
       select: {
         id: true,
