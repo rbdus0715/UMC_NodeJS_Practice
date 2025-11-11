@@ -1,5 +1,5 @@
 import { PrismaClient, review } from '@prisma/client';
-import { CreateReviewDto, responseFromReviews } from './dto/review.dto';
+import { CreateReviewDto } from './dto/review.dto';
 import { ulid } from 'ulid';
 
 export class ReviewRepository {
@@ -29,11 +29,13 @@ export class ReviewRepository {
         restaurant: true,
         user: true,
       },
-      where: { restaurant_id, id: { gt: cursor } },
+      cursor: { id: cursor },
+      where: { restaurant_id },
       orderBy: { id: 'asc' },
       take: 5,
     });
-    return responseFromReviews(reviews); // dto 적용하여 다음 커서 추가 후 반환
+    // return responseFromReviews(reviews); // dto 적용하여 다음 커서 추가 후 반환
+    return reviews;
   }
 
   async findByUserId(user_id: string, cursor: string) {
@@ -52,7 +54,8 @@ export class ReviewRepository {
         review_img: true,
         comment: true,
       },
-      where: { user_id, id: { gt: cursor } },
+      where: { user_id },
+      cursor: { id: cursor },
       orderBy: { created_at: 'desc' },
       take: 5,
     });

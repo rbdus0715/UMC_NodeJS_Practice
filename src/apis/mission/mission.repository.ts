@@ -36,7 +36,8 @@ export default class MissionRepository {
           },
         },
       },
-      where: { restaurant_id, id: { gt: cursor } },
+      where: { restaurant_id },
+      cursor: { id: cursor },
       orderBy: { created_at: 'desc' },
       take: 5,
     });

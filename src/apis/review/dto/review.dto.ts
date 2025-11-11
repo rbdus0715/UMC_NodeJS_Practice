@@ -12,11 +12,11 @@ export class CreateReviewDto {
   }
 }
 
-export const responseFromReviews = (reviews: any) => {
-  return {
-    data: reviews,
-    pagination: {
-      cursor: reviews.length ? reviews[reviews.length - 1].id : null,
-    },
-  };
-};
+// export const responseFromReviews = (reviews: any) => {
+//   return {
+//     data: reviews,
+//     pagination: {
+//       cursor: reviews.length ? reviews[reviews.length - 1].id : null,
+//     },
+//   };
+// };
