@@ -17,7 +17,9 @@ export class RestaurantRepository {
   }
 
   async find(): Promise<restaurant[]> {
-    return await this.prisma.restaurant.findMany();
+    const result = await this.prisma.restaurant.findMany();
+    if (!result || result?.length == 0) throw new Error('매장 조회 실패');
+    return result;
   }
 
   async findOneById(id: string): Promise<restaurant> {

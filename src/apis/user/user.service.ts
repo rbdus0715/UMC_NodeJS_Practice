@@ -19,7 +19,10 @@ export default class UserService {
   }
 
   async find(): Promise<user[]> {
-    return await this.userRepository.find();
+    const result = await this.userRepository.find();
+    if (!result || result?.length == 0)
+      throw new Error('유저 조회 실패');
+    return result;
   }
 
   async findOneById({ id }: { id: string }): Promise<user> {

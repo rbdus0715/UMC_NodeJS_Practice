@@ -24,6 +24,7 @@ export default class MissionRepository {
 
   async find(): Promise<mission[]> {
     const result = await this.prisma.mission.findMany();
+    if (!result || result?.length == 0) throw new Error('미션 조회 실패');
     return result;
   }
 

@@ -14,10 +14,16 @@ export default class UserMissionRepository {
   }
 
   async find(): Promise<user_mission[]> {
-    return await this.prisma.user_mission.findMany();
+    const result = await this.prisma.user_mission.findMany();
+    if (!result || result?.length == 0) throw new Error('유저-미션 조회 실패');
+    return result;
   }
 
-  async update(user_id: string, mission_id: string, status: number): Promise<user_mission> {
+  async update(
+    user_id: string,
+    mission_id: string,
+    status: number
+  ): Promise<user_mission> {
     return await this.prisma.user_mission.update({
       where: {
         user_id_mission_id: {

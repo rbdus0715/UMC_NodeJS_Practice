@@ -12,7 +12,9 @@ export class ReviewRepository {
   }
 
   async find(): Promise<review[]> {
-    return await this.prisma.review.findMany();
+    const result = await this.prisma.review.findMany();
+    if (!result || result?.length == 0) throw new Error('리뷰 조회 실패');
+    return result;
   }
 
   async findOneById({ id }: { id: string }): Promise<review> {
