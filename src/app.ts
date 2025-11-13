@@ -6,8 +6,14 @@ import missionRouter from './routes/mission.route';
 import userRouter from './routes/user.route';
 import userMissionRouter from './routes/userMission.route';
 import { errorHandler } from './middlewares/errorHandle.middleware';
+import compression from 'compression';
 
 const app = express();
+app.use(
+  compression({
+    threshold: 512,
+  })
+);
 setupMiddleware(app);
 
 app.use('/v1/restaurant', restaurantRouter);
