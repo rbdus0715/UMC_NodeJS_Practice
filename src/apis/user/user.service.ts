@@ -2,6 +2,7 @@ import { user } from '@prisma/client';
 import { CreateUserDto } from './dto/user.dto';
 import UserRepository from './user.repository';
 import bcrypt from 'bcrypt';
+import { UserNotFoundError } from '../../commons/error';
 
 export default class UserService {
   constructor(private readonly userRepository: UserRepository) {}
@@ -20,14 +21,14 @@ export default class UserService {
 
   async find(): Promise<user[]> {
     const result = await this.userRepository.find();
-    if (!result || result?.length == 0)
-      throw new Error('유저 조회 실패');
+    if (!result || result?.length == 0) throw new Error('유저 조회 실패');
     return result;
   }
 
+  // 미션 2
   async findOneById({ id }: { id: string }): Promise<user> {
     const result = await this.userRepository.findOneById({ id });
-    if (!result) throw new Error(`id: ${id} 인 유저가 존재하지 않습니다.`);
+    if (!result) throw new UserNotFoundError(id);
     return result;
   }
 
