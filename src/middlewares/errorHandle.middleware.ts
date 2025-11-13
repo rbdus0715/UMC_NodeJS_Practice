@@ -1,15 +1,17 @@
-import { ErrorRequestHandler } from 'express';
+// src/middleware/errorHandler.ts
+import { Request, Response, NextFunction } from 'express';
+import { ApiResponse } from '../commons/apiResponse';
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  if (res.headersSent) {
-    return next(err);
-  }
+export function errorHandler(
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  console.error(err); // 개발용 로그
 
-  res.status(err.statusCode || 500).json({
-    errorCode: err.errorCode || 'unknown',
-    reason: err.reason || err.message || null,
-    data: err.data || null,
-  });
-};
+  const statusCode = err.statusCode || 500; // 에러에 statusCode가 있으면 사용, 없으면 500
+  const message = err.message || 'Internal Server Error';
 
-export default errorHandler;
+  res.status(statusCode).json(ApiResponse.error(message));
+}
