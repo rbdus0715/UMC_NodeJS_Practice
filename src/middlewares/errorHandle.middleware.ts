@@ -13,5 +13,4 @@ export function errorHandler(
   const message = err.message || 'Internal Server Error';
 
   res.status(statusCode).json(ApiResponse.error(message));
-  next();
 }
