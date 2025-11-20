@@ -1,39 +1,67 @@
-import { Pool } from 'mysql2/promise';
-import { Review } from './entities/review.entity';
-import { RowDataPacket } from 'mysql2';
+import { PrismaClient, review } from '@prisma/client';
 import { CreateReviewDto } from './dto/review.dto';
 import { ulid } from 'ulid';
+import { ReviewForRestaurantList, ReviewForUserList } from './review.type';
 
 export class ReviewRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
-  async create(data: CreateReviewDto): Promise<Review> {
-    const id = ulid();
-    // chapter5 수행하기 위한 코드
-    // data.user_id = 01K924XQ0703MBTFQT2VR209CZ;
-    // data.restaurant_id = 01K90WTE6MGHK2PJBM5RKHT29Y;
-    const query_string =
-      'INSERT INTO review (id, user_id, restaurant_id, score, content, img_url) VALUES (?, ?, ?, ?, ?, ?)';
-    await this.pool.query(query_string, [
-      id,
-      data.user_id,
-      data.restaurant_id,
-      data.score,
-      data.content,
-      data.img_url,
-    ]);
-    return this.findOneById({ id });
+  async create(data: CreateReviewDto): Promise<review> {
+    data.id = ulid();
+    const result = this.prisma.review.create({ data });
+    return result;
   }
 
-  async find(): Promise<Review[]> {
-    const query_string = 'SELECT * FROM review';
-    const [rows] = await this.pool.query<RowDataPacket[]>(query_string);
-    return rows as Review[];
+  async find(): Promise<review[]> {
+    const result = await this.prisma.review.findMany();
+    if (!result || result?.length == 0) throw new Error('리뷰 조회 실패');
+    return result;
   }
 
-  async findOneById({ id }: { id: string }): Promise<Review> {
-    const query_string = 'SELECT * FROM review WHERE id = ?';
-    const [rows] = await this.pool.query<RowDataPacket[]>(query_string, [id]);
-    return rows[0] as Review;
+  async findOneById({ id }: { id: string }): Promise<review> {
+    const result = await this.prisma.review.findFirst({ where: { id } });
+    if (!result) throw new Error('해당 아이디를 갖는 리뷰 없음');
+    return result;
+  }
+
+  async findByRestaurantId(restaurant_id: string, cursor: string): Promise<ReviewForRestaurantList[]> {
+    const reviews = await this.prisma.review.findMany({
+      select: {
+        id: true,
+        content: true,
+        restaurant: true,
+        user: true,
+      },
+      cursor: { id: cursor },
+      where: { restaurant_id },
+      orderBy: { id: 'asc' },
+      take: 5,
+    });
+    // return responseFromReviews(reviews); // dto 적용하여 다음 커서 추가 후 반환
+    return reviews;
+  }
+
+  async findByUserId(user_id: string, cursor: string): Promise<ReviewForUserList[]> {
+    const reviews = await this.prisma.review.findMany({
+      select: {
+        id: true,
+        content: true,
+        restaurant: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        score: true,
+        created_at: true,
+        review_img: true,
+        comment: true,
+      },
+      where: { user_id },
+      cursor: { id: cursor },
+      orderBy: { created_at: 'desc' },
+      take: 5,
+    });
+    return reviews;
   }
 }

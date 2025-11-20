@@ -1,15 +1,15 @@
+import { mission } from '@prisma/client';
 import { CreateMissionDto } from './dto/mission.dto';
-import { Mission } from './entities/mission.entity';
 import MissionRepository from './mission.repository';
 
 export default class MissionService {
   constructor(private readonly missionRepository: MissionRepository) {}
 
-  async create(data: CreateMissionDto): Promise<Mission> {
+  async create(data: CreateMissionDto): Promise<mission> {
     return await this.missionRepository.create(data);
   }
 
-  async find(): Promise<Mission[]> {
+  async find(): Promise<mission[]> {
     return await this.missionRepository.find();
   }
 
@@ -17,5 +17,14 @@ export default class MissionService {
     const result = await this.missionRepository.findOneById({ id });
     if (!result) throw new Error(`id: ${id}인 미션이 존재하지 않습니다.`);
     return result;
+  }
+
+  async findByRestaurantId(restaurant_id: string, cursor: string) {
+    const result = await this.missionRepository.findByRestaurantId(restaurant_id, cursor);
+    return result;
+  }
+
+  async findByUserId(user_id: string, cursor: string) {
+    const result = await this.missionRepository.findByUserId(user_id, cursor);
   }
 }

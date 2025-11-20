@@ -1,0 +1,260 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model area {
+  id         String       @id @db.Char(26)
+  name       String?      @db.VarChar(80)
+  restaurant restaurant[]
+  user_area  user_area[]
+}
+
+model comment {
+  id            String    @id @db.Char(26)
+  review_id     String    @db.Char(26)
+  user_id       String    @db.Char(26)
+  restaurant_id String    @db.Char(26)
+  content       String?   @db.VarChar(255)
+  created_at    DateTime? @db.DateTime(0)
+  deleted_at    DateTime? @db.DateTime(0)
+  updated_at    DateTime? @db.DateTime(0)
+  review        review    @relation(fields: [review_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_review_TO_comment_1")
+  user          user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_TO_comment_1")
+
+  @@index([review_id], map: "FK_review_TO_comment_1")
+  @@index([user_id], map: "FK_user_TO_comment_1")
+}
+
+model food_category {
+  id                       String                     @id @db.Char(26)
+  type                     food_category_type?
+  restaurant_food_category restaurant_food_category[]
+  user_food_category       user_food_category[]
+}
+
+model inquiry {
+  id                  String           @id @db.Char(26)
+  inquiry_category_id String           @db.Char(26)
+  user_id             String           @db.Char(26)
+  title               String?          @db.VarChar(100)
+  content             String?          @db.Text
+  status              inquiry_status?
+  created_at          DateTime?        @db.DateTime(6)
+  inquiry_category    inquiry_category @relation(fields: [inquiry_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_inquiry_category_TO_inquiry_1")
+  user                user             @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_TO_inquiry_1")
+  inquiry_img         inquiry_img[]
+
+  @@index([inquiry_category_id], map: "FK_inquiry_category_TO_inquiry_1")
+  @@index([user_id], map: "FK_user_TO_inquiry_1")
+}
+
+model inquiry_category {
+  id      String                 @id @db.Char(26)
+  type    inquiry_category_type?
+  inquiry inquiry[]
+}
+
+model inquiry_img {
+  id         String  @id @db.Char(26)
+  inquiry_id String  @db.Char(26)
+  url        String? @db.VarChar(255)
+  inquiry    inquiry @relation(fields: [inquiry_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_inquiry_TO_inquiry_img_1")
+
+  @@unique([inquiry_id, url], map: "UK_INQUIRY_IMG_ID_URL")
+}
+
+model mission {
+  id            String         @id @db.Char(26)
+  restaurant_id String         @db.Char(26)
+  area_id       String         @db.Char(26)
+  content       String?        @db.VarChar(100)
+  price         Int?
+  point         Int?
+  deadline      DateTime?      @db.DateTime(0)
+  created_at    DateTime?      @db.DateTime(6)
+  restaurant    restaurant     @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_restaurant_TO_mission_1")
+  point_transaction         point[]
+  user_mission  user_mission[]
+
+  @@unique([restaurant_id, area_id], map: "UK_MISSION_RESTAURANT_NUMBER")
+  @@index([area_id], map: "FK_area_TO_mission_1")
+}
+
+model notice {
+  id          String       @id @db.Char(26)
+  user_id     String       @db.Char(26)
+  type        notice_type?
+  target_id   String?      @db.Char(26)
+  read_status Int?         @db.TinyInt
+  content     String?      @db.VarChar(100)
+  created_at  DateTime?    @db.DateTime(6)
+  user        user         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_TO_notice_1")
+
+  @@index([user_id], map: "FK_user_TO_notice_1")
+}
+
+model point {
+  id            String  @id @db.Char(26)
+  mission_id    String  @db.Char(26)
+  restaurant_id String  @db.Char(26)
+  area_id       String  @db.Char(26)
+  user_id       String  @db.Char(26)
+  point_transaction         Int?
+  mission       mission @relation(fields: [mission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_mission_TO_point_1")
+  user          user    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_TO_point_1")
+
+  @@unique([user_id, mission_id], map: "UK_POINT_USER_MISSION")
+  @@index([mission_id], map: "FK_mission_TO_point_1")
+}
+
+model restaurant {
+  id                       String                     @id @db.Char(26)
+  area_id                  String                     @db.Char(26)
+  name                     String?                    @db.VarChar(100)
+  phone_number             String?                    @db.VarChar(20)
+  location                 String?                    @db.VarChar(100)
+  lat                      Float?                     @db.Float
+  lng                      Float?                     @db.Float
+  created_at               DateTime?                  @db.DateTime(0)
+  deleted_at               DateTime?                  @db.DateTime(0)
+  mission                  mission[]
+  area                     area                       @relation(fields: [area_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_area_TO_restaurant_1")
+  restaurant_food_category restaurant_food_category[]
+  review                   review[]
+
+  @@unique([area_id, name], map: "UK_RESTAURANT_AREA_NAME")
+}
+
+model restaurant_food_category {
+  restaurant_id    String        @db.Char(26)
+  area_id          String        @db.Char(26)
+  foot_category_id String        @db.Char(26)
+  food_category    food_category @relation(fields: [foot_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_food_category_TO_restaurant_food_category_1")
+  restaurant       restaurant    @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_restaurant_TO_restaurant_food_category_1")
+
+  @@id([restaurant_id, foot_category_id])
+  @@index([foot_category_id], map: "FK_food_category_TO_restaurant_food_category_1")
+}
+
+model review {
+  id            String       @id @db.Char(26)
+  user_id       String       @db.Char(26)
+  restaurant_id String       @db.Char(26)
+  score         Int?
+  content       String?      @db.VarChar(255)
+  // img_url       String?      @db.VarChar(255)
+  created_at    DateTime?    @db.DateTime(6)
+  updated_at    DateTime?    @db.DateTime(0)
+  deleted_at    DateTime?    @db.DateTime(0)
+  comment       comment[]
+  restaurant    restaurant   @relation(fields: [restaurant_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_restaurant_TO_review_1")
+  user          user         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_TO_review_1")
+  review_img    review_img[]
+
+  @@unique([user_id, restaurant_id], map: "UK_REVIEW_USER_RESTAURANT")
+  @@index([restaurant_id], map: "FK_restaurant_TO_review_1")
+}
+
+model review_img {
+  id            String    @id @db.Char(26)
+  user_id       String    @db.Char(26)
+  restaurant_id String    @db.Char(26)
+  review_id     String    @db.Char(26)
+  url           String?   @db.VarChar(255)
+  created_at    DateTime? @db.DateTime(0)
+  review        review    @relation(fields: [review_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_review_TO_review_img_1")
+
+  @@unique([review_id, url], map: "UK_REVIEW_IMG_REVIEW_URL")
+}
+
+model user {
+  id                 String               @id @db.Char(26)
+  name               String?              @db.VarChar(20)
+  gender             user_gender?
+  birth              DateTime?            @db.Date
+  email              String?              @unique(map: "UK_USER_EMAIL") @db.VarChar(40)
+  nickname           String               @db.VarChar(20)
+  password           String               @db.VarChar(100)
+  profile_url        String?              @db.VarChar(255)
+  location           String?              @db.VarChar(255)
+  point              Int?
+  verified           Int?                 @db.TinyInt
+  notice_status      Int?                 @db.TinyInt
+  created_at         DateTime?            @default(dbgenerated("(now())")) @db.DateTime(0)
+  deleted_at         DateTime?            @db.DateTime(0)
+  comment            comment[]
+  inquiry            inquiry[]
+  notice             notice[]
+  point_transaction  point[]
+  review             review[]
+  user_area          user_area[]
+  user_food_category user_food_category[]
+  user_mission       user_mission[]
+}
+
+model user_area {
+  user_id String @db.Char(26)
+  area_id String @db.Char(26)
+  area    area   @relation(fields: [area_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_area_TO_user_area_1")
+  user    user   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_TO_user_area_1")
+
+  @@id([user_id, area_id])
+  @@index([area_id], map: "FK_area_TO_user_area_1")
+}
+
+model user_food_category {
+  user_id          String        @db.Char(26)
+  food_category_id String        @db.Char(26)
+  food_category    food_category @relation(fields: [food_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_food_category_TO_user_food_category_1")
+  user             user          @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_TO_user_food_category_1")
+
+  @@id([user_id, food_category_id])
+  @@index([food_category_id], map: "FK_food_category_TO_user_food_category_1")
+}
+
+model user_mission {
+  user_id       String  @db.Char(26)
+  mission_id    String  @db.Char(26)
+  restaurant_id String  @db.Char(26)
+  area_id       String  @db.Char(26)
+  status        Int?    @db.TinyInt
+  mission       mission @relation(fields: [mission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_mission_TO_user_mission_1")
+  user          user    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_TO_user_mission_1")
+
+  @@id([user_id, mission_id])
+  @@index([mission_id], map: "FK_mission_TO_user_mission_1")
+}
+
+enum inquiry_category_type {
+  SERVICE
+  BUG
+}
+
+enum food_category_type {
+  KOR
+  JAP
+  CHN
+}
+
+enum notice_type {
+  EVENT
+  COMMENT
+  INQUIRY
+}
+
+enum user_gender {
+  MALE
+  FEMALE
+  NONE
+}
+
+enum inquiry_status {
+  RESOLVED
+  PENDING
+  PROGRESS
+}

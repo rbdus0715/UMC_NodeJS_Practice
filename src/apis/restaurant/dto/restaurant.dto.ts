@@ -1,4 +1,5 @@
 export class CreateRestaurantInput {
+  id!: string;
   area_id: string;
   name: string;
   phone_number: string;
