@@ -24,6 +24,59 @@ const reviewService = new ReviewService(
 );
 const reiviewController = new ReviewController(reviewService);
 
-reviewRouter.post('/', reiviewController.createReview);
-reviewRouter.get('/', reiviewController.fetchReviews);
+reviewRouter.post(
+  '/',
+  // #swagger.tags = ['Review']
+  // #swagger.summary = '리뷰 생성'
+  // #swagger.description = '새로운 리뷰를 생성합니다.'
+  /* #swagger.parameters['body'] = {
+    in: 'body',
+    required: true,
+    schema: {
+      user_id: 'string',
+      restaurant_id: 'string',
+      score: 0,
+      content: 'string'
+    }
+  } */
+  /* #swagger.responses[201] = {
+    description: '리뷰 생성 성공',
+    schema: {
+      success: true,
+      message: '리뷰가 생성되었습니다.',
+      data: { id: 'string', user_id: 'string', restaurant_id: 'string', score: 0, content: 'string' }
+    }
+  } */
+  /* #swagger.responses[500] = {
+    description: '리뷰 생성 실패',
+    schema: {
+      success: true,
+      message: '리뷰 생성에 실패하였습니다.'
+    }
+  } */
+  reiviewController.createReview
+);
+
+reviewRouter.get(
+  '/',
+  // #swagger.tags = ['Review']
+  // #swagger.summary = '리뷰 목록 조회'
+  // #swagger.description = '모든 리뷰 목록을 조회합니다.'
+  /* #swagger.responses[200] = {
+    description: '리뷰 목록 조회 성공',
+    schema: {
+      success: true,
+      message: '모든 조회되었습니다.',
+      data: [{ id: 'string', user_id: 'string', restaurant_id: 'string', score: 0, content: 'string' }]
+    }
+  } */
+  /* #swagger.responses[500] = {
+    description: '리뷰 목록 조회 실패',
+    schema: {
+      success: false,
+      message: '모든 리뷰 조회에 실패하였습니다.'
+    }
+  } */
+  reiviewController.fetchReviews
+);
 export default reviewRouter;
