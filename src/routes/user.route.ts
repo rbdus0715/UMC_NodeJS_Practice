@@ -9,6 +9,7 @@ import { RestaurantService } from '../apis/restaurant/restaurant.service';
 import { RestaurantRepository } from '../apis/restaurant/restaurant.repository';
 import MissionRepository from '../apis/mission/mission.repository';
 import MissionService from '../apis/mission/mission.service';
+import passport from 'passport';
 
 const userRouter = express.Router();
 const userRepository = new UserRepository(prisma);
@@ -32,6 +33,8 @@ const userController = new UserController(
   reviewService,
   missionService
 );
+
+const isLogin = passport.authenticate('jwt', { session: false });
 
 userRouter.get(
   '/',
