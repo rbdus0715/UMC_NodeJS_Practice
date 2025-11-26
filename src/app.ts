@@ -6,6 +6,7 @@ import missionRouter from './routes/mission.route';
 import userRouter from './routes/user.route';
 import userMissionRouter from './routes/userMission.route';
 import fileRouter from './routes/file.route';
+import oauthRouter from './routes/oauth.route';
 import { errorHandler } from './middlewares/errorHandle.middleware';
 import swaggerMiddleware from './middlewares/swagger.middleware';
 import openapiRouter from './routes/openapi.route';
@@ -18,6 +19,7 @@ passportGoogle(app);
 swaggerMiddleware(app);
 
 app.use('openapi.json', openapiRouter);
+app.use('/oauth2', oauthRouter);
 app.use('/v1/restaurant', restaurantRouter);
 app.use('/v1/review', reviewRouter);
 app.use('/v1/mission', missionRouter);
