@@ -7,6 +7,7 @@ import { RestaurantRepository } from '../apis/restaurant/restaurant.repository';
 import prisma from '../config/db.config';
 import UserRepository from '../apis/user/user.repository';
 import UserService from '../apis/user/user.service';
+import passport from 'passport';
 
 const reviewRouter = Router();
 const reviewRepository = new ReviewRepository(prisma);
@@ -24,13 +25,19 @@ const reviewService = new ReviewService(
 );
 const reiviewController = new ReviewController(reviewService);
 
+const isLogin = passport.authenticate('jwt', { session: false });
+
 
 
 reviewRouter.post(
   '/',
+  isLogin,
   // #swagger.tags = ['Review']
   // #swagger.summary = '리뷰 생성'
   // #swagger.description = '새로운 리뷰를 생성합니다.'
+  /* #swagger.security = [{
+    "bearerAuth": []
+  }] */
   /* #swagger.parameters['body'] = {
     in: 'body',
     required: true,
@@ -47,6 +54,13 @@ reviewRouter.post(
       success: true,
       message: '리뷰가 생성되었습니다.',
       data: { id: 'string', user_id: 'string', restaurant_id: 'string', score: 0, content: 'string' }
+    }
+  } */
+  /* #swagger.responses[401] = {
+    description: '인증 실패',
+    schema: {
+      success: false,
+      message: '인증된 사용자 정보를 찾을 수 없습니다.'
     }
   } */
   /* #swagger.responses[500] = {

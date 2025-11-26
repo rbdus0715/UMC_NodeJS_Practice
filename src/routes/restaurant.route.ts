@@ -9,6 +9,7 @@ import UserRepository from '../apis/user/user.repository';
 import UserService from '../apis/user/user.service';
 import MissionService from '../apis/mission/mission.service';
 import MissionRepository from '../apis/mission/mission.repository';
+import passport from 'passport';
 
 const restaurantRouter = Router();
 
@@ -34,6 +35,8 @@ const restaurantController = new RestaurantController(
   missionService
 );
 
+const isLogin = passport.authenticate('jwt', { session: false });
+
 restaurantRouter.get(
   '/',
   // #swagger.tags = ['Restaurant']
@@ -52,9 +55,13 @@ restaurantRouter.get(
 
 restaurantRouter.post(
   '/',
+  isLogin,
   // #swagger.tags = ['Restaurant']
   // #swagger.summary = '레스토랑 생성'
   // #swagger.description = '새로운 레스토랑을 생성합니다.'
+  /* #swagger.security = [{
+    "bearerAuth": []
+  }] */
   /* #swagger.parameters['body'] = {
     in: 'body',
     required: true,
@@ -73,6 +80,13 @@ restaurantRouter.post(
       success: true,
       message: '레스토랑이 생성되었습니다.',
       data: { id: 'string', name: 'string', phone_number: 'string', location: 'string', lat: 0, lng: 0 }
+    }
+  } */
+  /* #swagger.responses[401] = {
+    description: '인증 실패',
+    schema: {
+      success: false,
+      message: '인증된 사용자 정보를 찾을 수 없습니다.'
     }
   } */
   /* #swagger.responses[500] = {

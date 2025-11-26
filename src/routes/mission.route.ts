@@ -4,6 +4,7 @@ import MissionRepository from '../apis/mission/mission.repository';
 import MissionService from '../apis/mission/mission.service';
 import MissionController from '../apis/mission/mission.controller';
 import prisma from '../config/db.config';
+import passport from 'passport';
 
 const missionRouter = Router();
 
@@ -11,12 +12,18 @@ const missionRepository = new MissionRepository(prisma);
 const missionService = new MissionService(missionRepository);
 const missionController = new MissionController(missionService);
 
+const isLogin = passport.authenticate('jwt', { session: false });
+
 
 missionRouter.post(
   '/',
+  isLogin,
   // #swagger.tags = ['Mission']
   // #swagger.summary = '미션 생성'
   // #swagger.description = '새로운 미션을 생성합니다.'
+  /* #swagger.security = [{
+    "bearerAuth": []
+  }] */
   /* #swagger.parameters['body'] = {
     in: 'body',
     required: true,
@@ -35,6 +42,13 @@ missionRouter.post(
       success: true,
       message: '미션이 생성되었습니다.',
       data: { id: 'string', restaurant_id: 'string', area_id: 'string', content: 'string', price: 0, point: 0, deadline: 'string' }
+    }
+  } */
+  /* #swagger.responses[401] = {
+    description: '인증 실패',
+    schema: {
+      success: false,
+      message: '인증된 사용자 정보를 찾을 수 없습니다.'
     }
   } */
   /* #swagger.responses[500] = {
