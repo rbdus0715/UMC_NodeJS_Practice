@@ -44,6 +44,11 @@ const googleVerify = async (profile: Profile) => {
 
   const user = await prisma.user.findFirst({ where: { email } });
   if (user !== null) {
+    // 기존 사용자가 다른 인증 방식으로 가입했는지 확인
+    const authProvider = (user as any).auth_provider;
+    if (authProvider !== 'GOOGLE') {
+      throw new Error(`이 이메일은 ${authProvider === 'EMAIL' ? '이메일/비밀번호' : authProvider === 'NAVER' ? 'Naver' : '다른'} 로그인으로 가입되었습니다. ${authProvider === 'EMAIL' ? '이메일/비밀번호' : authProvider === 'NAVER' ? 'Naver' : '해당'} 로그인을 사용해주세요.`);
+    }
     return { id: user.id, email: user.email, name: user.name };
   }
 
@@ -54,7 +59,8 @@ const googleVerify = async (profile: Profile) => {
       password: '1234', // 필요 없음
       gender: 'NONE',
       email: profile.emails?.[0]?.value,
-    },
+      auth_provider: 'GOOGLE' as any,
+    } as any,
   });
 
   return { id: created.id, email: created.email, name: created.name };
@@ -82,6 +88,11 @@ const naverVerify = async (profile: NaverProfile) => {
 
   const user = await prisma.user.findFirst({ where: { email } });
   if (user !== null) {
+    // 기존 사용자가 다른 인증 방식으로 가입했는지 확인
+    const authProvider = (user as any).auth_provider;
+    if (authProvider !== 'NAVER') {
+      throw new Error(`이 이메일은 ${authProvider === 'EMAIL' ? '이메일/비밀번호' : authProvider === 'GOOGLE' ? 'Google' : '다른'} 로그인으로 가입되었습니다. ${authProvider === 'EMAIL' ? '이메일/비밀번호' : authProvider === 'GOOGLE' ? 'Google' : '해당'} 로그인을 사용해주세요.`);
+    }
     return { id: user.id, email: user.email, name: user.name };
   }
 
@@ -94,7 +105,8 @@ const naverVerify = async (profile: NaverProfile) => {
       password: '1234', // 필요 없음
       gender: 'NONE',
       email: email,
-    },
+      auth_provider: 'NAVER' as any,
+    } as any,
   });
 
   return { id: created.id, email: created.email, name: created.name };

@@ -185,6 +185,7 @@ model user {
   point              Int?
   verified           Int?                 @db.TinyInt
   notice_status      Int?                 @db.TinyInt
+  auth_provider      auth_provider        @default(EMAIL)
   created_at         DateTime?            @default(dbgenerated("(now())")) @db.DateTime(0)
   deleted_at         DateTime?            @db.DateTime(0)
   comment            comment[]
@@ -257,4 +258,10 @@ enum inquiry_status {
   RESOLVED
   PENDING
   PROGRESS
+}
+
+enum auth_provider {
+  EMAIL
+  GOOGLE
+  NAVER
 }
