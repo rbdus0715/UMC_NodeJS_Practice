@@ -36,6 +36,7 @@ oauthRouter.get(
   }
 );
 
+// 인증 페이지로 리다이렉트
 oauthRouter.get(
   '/naver',
   passport.authenticate('naver'),
