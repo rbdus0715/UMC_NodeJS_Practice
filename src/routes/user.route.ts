@@ -37,6 +37,40 @@ const userController = new UserController(
 const isLogin = passport.authenticate('jwt', { session: false });
 
 userRouter.get(
+  '/me',
+  isLogin,
+  // #swagger.tags = ['User']
+  // #swagger.summary = '내 정보 조회'
+  // #swagger.description = '현재 로그인한 사용자의 정보를 조회합니다.'
+  /* #swagger.security = [{
+    "bearerAuth": []
+  }] */
+  /* #swagger.responses[200] = {
+    description: '내 정보 조회 성공',
+    schema: {
+      success: true,
+      message: '내 정보 조회에 성공하였습니다.',
+      data: { id: 'string', name: 'string', email: 'string', nickname: 'string' }
+    }
+  } */
+  /* #swagger.responses[401] = {
+    description: '인증 실패',
+    schema: {
+      success: false,
+      message: '인증된 사용자 정보를 찾을 수 없습니다.'
+    }
+  } */
+  /* #swagger.responses[500] = {
+    description: '내 정보 조회 실패',
+    schema: {
+      success: false,
+      message: '내 정보 조회에 실패하였습니다.'
+    }
+  } */
+  userController.fetchUser
+);
+
+userRouter.get(
   '/',
   // #swagger.tags = ['User']
   // #swagger.summary = '사용자 목록 조회'

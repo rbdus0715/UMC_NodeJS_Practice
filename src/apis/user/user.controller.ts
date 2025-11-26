@@ -63,4 +63,23 @@ export class UserController {
       res.status(500).json(response);
     }
   };
+
+  fetchUser = async (req: Request, res: Response) => {
+    try {
+      const user = req.user as any;
+      if (!user || !user.id) {
+        const response = ApiResponse.error('인증된 사용자 정보를 찾을 수 없습니다.');
+        return res.status(401).json(response);
+      }
+      const userInfo = await this.userService.findOneById({ id: user.id });
+      const response = ApiResponse.success(
+        '내 정보 조회에 성공하였습니다.',
+        userInfo
+      );
+      res.status(200).json(response);
+    } catch (error) {
+      const response = ApiResponse.error('내 정보 조회에 실패하였습니다.');
+      res.status(500).json(response);
+    }
+  };
 }
