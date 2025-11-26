@@ -70,6 +70,54 @@ userRouter.get(
   userController.fetchUser
 );
 
+userRouter.put(
+  '/me',
+  isLogin,
+  // #swagger.tags = ['User']
+  // #swagger.summary = '내 정보 수정'
+  // #swagger.description = '현재 로그인한 사용자의 정보를 수정합니다.'
+  /* #swagger.security = [{
+    "bearerAuth": []
+  }] */
+  /* #swagger.parameters['body'] = {
+    in: 'body',
+    required: false,
+    schema: {
+      name: 'string',
+      gender: 'MALE|FEMALE|NONE',
+      birth: '2024-01-01',
+      nickname: 'string',
+      password: 'string',
+      profile_url: 'string',
+      location: 'string',
+      notice_status: 0
+    }
+  } */
+  /* #swagger.responses[200] = {
+    description: '내 정보 수정 성공',
+    schema: {
+      success: true,
+      message: '내 정보 수정에 성공하였습니다.',
+      data: { id: 'string', name: 'string', email: 'string', nickname: 'string' }
+    }
+  } */
+  /* #swagger.responses[401] = {
+    description: '인증 실패',
+    schema: {
+      success: false,
+      message: '인증된 사용자 정보를 찾을 수 없습니다.'
+    }
+  } */
+  /* #swagger.responses[500] = {
+    description: '내 정보 수정 실패',
+    schema: {
+      success: false,
+      message: '내 정보 수정에 실패하였습니다.'
+    }
+  } */
+  userController.updateUser
+);
+
 userRouter.get(
   '/',
   // #swagger.tags = ['User']

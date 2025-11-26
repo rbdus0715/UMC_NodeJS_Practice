@@ -25,4 +25,11 @@ export default class UserRepository {
   async findOneByNickname(nickname: string): Promise<user | null> {
     return await this.prisma.user.findFirst({ where: { nickname } });
   }
+
+  async update(id: string, data: Partial<user>): Promise<user> {
+    return await this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
 }
