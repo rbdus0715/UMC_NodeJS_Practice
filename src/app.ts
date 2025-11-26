@@ -11,11 +11,13 @@ import { errorHandler } from './middlewares/errorHandle.middleware';
 import swaggerMiddleware from './middlewares/swagger.middleware';
 import openapiRouter from './routes/openapi.route';
 import passportGoogle from './middlewares/passportGoogle.middleware';
+import passportNaver from './middlewares/passportNaver.middleware';
 
 const app = express();
 
 setupMiddleware(app);
 passportGoogle(app);
+passportNaver(app);
 swaggerMiddleware(app);
 
 app.use('openapi.json', openapiRouter);
