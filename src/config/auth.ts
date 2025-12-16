@@ -1,14 +1,13 @@
 import dotenv from 'dotenv';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-// @ts-ignore - passport-naver 타입 정의가 없음
 import { Strategy as NaverStrategy } from 'passport-naver';
-import jwt from 'jsonwebtoken'; // JWT 생성을 위해 import
+import jwt from 'jsonwebtoken'; 
 import prisma from './db.config';
 import { ulid } from 'ulid';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 
 dotenv.config();
-const secret = process.env.JWT_SECRET; // .env의 비밀 키
+const secret = process.env.JWT_SECRET; 
 
 type User = {
   id: string;
