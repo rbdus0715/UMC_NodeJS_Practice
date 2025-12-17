@@ -36,9 +36,15 @@ jobs:
 
       - name: Copy Workspace
         run: |
+          ssh umc9thworkbook 'sudo rm -rf /opt/app/*'
           ssh umc9thworkbook 'sudo mkdir -p /opt/app'
           ssh umc9thworkbook 'sudo chown ubuntu:ubuntu /opt/app'
-          scp -r ./[!.]* umc9thworkbook:/opt/app
+          
+          # 모든 파일 복사 (숨김 파일 제외)
+          scp -r $(ls -A | grep -v '^\\.git$') umc9thworkbook:/opt/app/
+          
+          # 복사 확인
+          ssh umc9thworkbook 'ls -la /opt/app/'
 
       - name: Install dependencies
         run: |
