@@ -30,7 +30,7 @@ jobs:
         env:
           EC2_USER: ubuntu
           EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_SSH_KEY: ${{ secrets.SECRET }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
 
       - name: Copy Workspace
         run: |
