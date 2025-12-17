@@ -26,6 +26,8 @@ jobs:
             User $EC2_USER
             IdentityFile ~/.ssh/id_rsa
             StrictHostKeyChecking no
+            PubkeyAcceptedAlgorithms +ssh-rsa   # 추가
+            HostKeyAlgorithms +ssh-rsa           # 추가
           END
         env:
           EC2_USER: ubuntu
