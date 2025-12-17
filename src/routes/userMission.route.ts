@@ -3,11 +3,14 @@ import UserMissionRepository from '../apis/user_mission/userMission.repository';
 import UserMissionService from '../apis/user_mission/userMission.service';
 import UserMissionController from '../apis/user_mission/userMission.controller';
 import prisma from '../config/db.config';
+import passport from 'passport';
 
 const userMissionRouter = express.Router();
 const userMissionRepository = new UserMissionRepository(prisma);
 const userMissionService = new UserMissionService(userMissionRepository);
 const userMissionController = new UserMissionController(userMissionService);
+
+const isLogin = passport.authenticate('jwt', { session: false });
 
 userMissionRouter.get(
   '/',
@@ -34,9 +37,13 @@ userMissionRouter.get(
 
 userMissionRouter.post(
   '/',
+  isLogin,
   // #swagger.tags = ['UserMission']
   // #swagger.summary = '사용자 미션 생성'
   // #swagger.description = '새로운 사용자-미션을 생성합니다.'
+  /* #swagger.security = [{
+    "bearerAuth": []
+  }] */
   /* #swagger.parameters['body'] = {
     in: 'body',
     required: true,
@@ -54,6 +61,13 @@ userMissionRouter.post(
       message: '유저-미션 생성 성공'
     }
   } */
+  /* #swagger.responses[401] = {
+    description: '인증 실패',
+    schema: {
+      success: false,
+      message: '인증된 사용자 정보를 찾을 수 없습니다.'
+    }
+  } */
   /* #swagger.responses[500] = {
     description: '사용자 미션 생성 실패',
     schema: {
@@ -66,9 +80,13 @@ userMissionRouter.post(
 
 userMissionRouter.patch(
   '/:user_id/:mission_id',
+  isLogin,
   // #swagger.tags = ['UserMission']
   // #swagger.summary = '사용자 미션 완료 처리'
   // #swagger.description = '사용자 미션을 완료 처리합니다.'
+  /* #swagger.security = [{
+    "bearerAuth": []
+  }] */
   /* #swagger.parameters['user_id'] = {
     in: 'path',
     required: true,
@@ -94,6 +112,13 @@ userMissionRouter.patch(
       success: true,
       message: '미션 완료 처리 성공',
       data: {}
+    }
+  } */
+  /* #swagger.responses[401] = {
+    description: '인증 실패',
+    schema: {
+      success: false,
+      message: '인증된 사용자 정보를 찾을 수 없습니다.'
     }
   } */
   /* #swagger.responses[500] = {

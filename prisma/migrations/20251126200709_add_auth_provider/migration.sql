@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `auth_provider` ENUM('EMAIL', 'GOOGLE', 'NAVER') NOT NULL DEFAULT 'EMAIL';

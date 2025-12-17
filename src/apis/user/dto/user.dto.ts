@@ -34,3 +34,24 @@ export class CreateUserDto {
     this.deleted_at = null;
   }
 }
+
+export class UpdateUserDto {
+  name?: string;
+  gender?: GENDER;
+  birth?: Date;
+  nickname?: string;
+  password?: string;
+  profile_url?: string;
+  location?: string;
+  notice_status?: number;
+  constructor(body: any) {
+    if (body.name !== undefined) this.name = body.name;
+    if (body.gender !== undefined) this.gender = body.gender;
+    if (body.birth !== undefined) this.birth = body.birth;
+    if (body.nickname !== undefined) this.nickname = body.nickname;
+    if (body.password !== undefined) this.password = body.password;
+    if (body.profile_url !== undefined) this.profile_url = body.profile_url;
+    if (body.location !== undefined) this.location = body.location;
+    if (body.notice_status !== undefined) this.notice_status = body.notice_status;
+  }
+}

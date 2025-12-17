@@ -3,6 +3,7 @@ import { ApiResponse } from '../../commons/apiResponse';
 import { Request, Response } from 'express';
 import ReviewService from '../review/review.service';
 import MissionService from '../mission/mission.service';
+import { UpdateUserDto } from './dto/user.dto';
 
 export class UserController {
   constructor(
@@ -60,6 +61,47 @@ export class UserController {
       res.status(200).json(response);
     } catch (error) {
       const response = ApiResponse.error('해당 유저에 대한 미션 조회 실패');
+      res.status(500).json(response);
+    }
+  };
+
+  fetchUser = async (req: Request, res: Response) => {
+    try {
+      const user = req.user as any;
+      if (!user || !user.id) {
+        const response = ApiResponse.error('인증된 사용자 정보를 찾을 수 없습니다.');
+        return res.status(401).json(response);
+      }
+      const userInfo = await this.userService.findOneById({ id: user.id });
+      const response = ApiResponse.success(
+        '내 정보 조회에 성공하였습니다.',
+        userInfo
+      );
+      res.status(200).json(response);
+    } catch (error) {
+      const response = ApiResponse.error('내 정보 조회에 실패하였습니다.');
+      res.status(500).json(response);
+    }
+  };
+
+  updateUser = async (req: Request, res: Response) => {
+    try {
+      const user = req.user as any;
+      if (!user || !user.id) {
+        const response = ApiResponse.error('인증된 사용자 정보를 찾을 수 없습니다.');
+        return res.status(401).json(response);
+      }
+      const updateUserDto = new UpdateUserDto(req.body);
+      const updatedUser = await this.userService.update(user.id, updateUserDto);
+      const response = ApiResponse.success(
+        '내 정보 수정에 성공하였습니다.',
+        updatedUser
+      );
+      res.status(200).json(response);
+    } catch (error) {
+      const response = ApiResponse.error(
+        (error as Error).message || '내 정보 수정에 실패하였습니다.'
+      );
       res.status(500).json(response);
     }
   };
